@@ -1,0 +1,107 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Employee {
+    char name[50];
+    int id;
+    float salary;
+};
+
+struct EmployeeNode {
+    struct Employee emp;
+    struct EmployeeNode* next;
+};
+
+void displayEmployeesArray(struct Employee employees[], int numEmployees) {
+    printf("Employee Records (Array):\n");
+    for (int i = 0; i < numEmployees; i++) {
+        printf("Name: %s, ID: %d, Salary: %.2f\n", employees[i].name, employees[i].id, employees[i].salary);
+    }
+}
+
+void displayEmployeesLinkedList(struct EmployeeNode* head) {
+    printf("Employee Records (Linked List):\n");
+    while (head != NULL) {
+        printf("Name: %s, ID: %d, Salary: %.2f\n", head->emp.name, head->emp.id, head->emp.salary);
+        head = head->next;
+    }
+}
+
+int main() {
+    struct Employee employeesArray[100];
+    struct EmployeeNode* employeesLinkedList = NULL;
+    int numEmployeesArray = 0;
+    int choice;
+
+    do {
+        printf("\nEmployee Management System\n");
+        printf("1. Add Employee (Array)\n");
+        printf("2. Add Employee (Linked List)\n");
+        printf("3. Display Employees (Array)\n");
+        printf("4. Display Employees (Linked List)\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: {
+                char name[50];
+                int id;
+                float salary;
+                printf("Enter employee name: ");
+                scanf("%s", name);
+                printf("Enter employee ID: ");
+                scanf("%d", &id);
+                printf("Enter employee salary: ");
+                scanf("%f", &salary);
+                strcpy(employeesArray[numEmployeesArray].name, name);
+                employeesArray[numEmployeesArray].id = id;
+                employeesArray[numEmployeesArray].salary = salary;
+                numEmployeesArray++;
+                printf("Employee added to array successfully!\n");
+                break;
+            }
+            case 2: {
+                char name[50];
+                int id;
+                float salary;
+                printf("Enter employee name: ");
+                scanf("%s", name);
+                printf("Enter employee ID: ");
+                scanf("%d", &id);
+                printf("Enter employee salary: ");
+                scanf("%f", &salary);
+                struct EmployeeNode* newNode = (struct EmployeeNode*)malloc(sizeof(struct EmployeeNode));
+                strcpy(newNode->emp.name, name);
+                newNode->emp.id = id;
+                newNode->emp.salary = salary;
+                newNode->next = employeesLinkedList;
+                employeesLinkedList = newNode;
+                printf("Employee added to linked list successfully!\n");
+                break;
+            }
+            case 3:
+                displayEmployeesArray(employeesArray, numEmployeesArray);
+                break;
+            case 4:
+                displayEmployeesLinkedList(employeesLinkedList);
+                break;
+            case 5:
+                printf("Exiting the program. Goodbye!\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 5);
+
+    // Free allocated memory for linked list before exiting the program
+    struct EmployeeNode* temp;
+    while (employeesLinkedList != NULL) {
+        temp = employeesLinkedList;
+        employeesLinkedList = employeesLinkedList->next;
+        free(temp);
+    }
+
+    return 0;
+}
